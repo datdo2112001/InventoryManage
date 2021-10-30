@@ -1,0 +1,133 @@
+﻿@model IEnumerable<SaleManagement.Models.Product>
+
+@{
+            ViewData["Title"] = "Quản lí kho hàng";
+            var pages = ViewData["Pages"]; var p = ViewData["Page"]; var Count = ViewData["Count"]; var order = ViewData["orderBy"];
+            var condition = "";
+            switch (order)
+            {
+                case "Price": condition = "Giá tăng dần"; break;
+                case "Pricedsc": condition = "Giá giảm dần"; break;
+                case "Date": condition = "Ngày tăng dần"; break;
+                case "Datedsc": condition = "Ngày giảm dần"; break;
+                case "Stockdsc": condition = "Số lượng tồn kho giảm dần"; break;
+            }
+        }
+
+<p class="h3 test">Quản lí kho hàng</p>
+
+<div style="display: flex; flex-direction: row; flex-wrap: nowrap;" class="mb-3">
+    <div style="order: 1; padding-right: 10px; flex: 2;"><a asp-action="Create" class="btn btn-outline-primary">Thêm sản phẩm mới</a></div>
+    <div style="order: 2; padding-right: 10px; flex: 3;">
+        <form style="display: flex; flex-direction: row; flex-wrap: nowrap;" asp-action="InventoryManage">
+            <select style="order: 1; flex: 8;" class="btn btn-outline-primary" name="orderBy">
+                <option> @condition </option>
+                <option value="Price">Sắp xếp theo giá nhập tăng dần</option>
+                <option value="Pricedsc">Sắp xếp theo giá nhập giảm dần</option>
+                <option value="Date">Sắp xếp theo ngày nhập tăng dần</option>
+                <option value="Datedsc">Sắp xếp theo ngày nhập giảm dần</option>
+                <option value="Stockdsc">Sắp xếp theo số lượng tồn kho giảm dần</option>
+            </select>
+            <div style="order: 1; flex: 2;" class="input-group-append">
+                <button class="btn btn-outline-secondary" type="submit"> Search </button>
+            </div>
+        </form>
+    </div>
+    <div style="order: 3; flex: 5;">
+        <form style="display: flex; flex-direction: row; flex-wrap: nowrap;" asp-action="Search" method="get">
+            <input style="order: 1; flex: 8;" type="text" class="form-control" placeholder="Search for" name="keyword" />
+            <div  style="order: 2; flex: 2;" class="input-group-append">
+                <button class="btn btn-outline-secondary" type="submit"> Search </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<table class="table table-hover table-sm">
+    <thead>
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.ProductCode)</th>
+            <th>@Html.DisplayNameFor(model => model.ProductName)</th>
+            <th>@Html.DisplayNameFor(model => model.ProductLine)</th>
+            <th>@Html.DisplayNameFor(model => model.Factory)</th>
+            <th>@Html.DisplayNameFor(model => model.Date)</th>
+            <th>@Html.DisplayNameFor(model => model.Price)</th>
+            <th>@Html.DisplayNameFor(model => model.Stock)</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.ProductCode</td>
+                <td>@item.ProductName</td>
+                <td>@item.ProductLine</td>
+                <td>@item.Factory</td>
+                <td>@item.Date</td>
+                <td>@item.Price</td>
+
+
+                <td>@item.Stock</td>
+                <td>
+                    <button type="button" onclick="loadNote('@item.ProductCode')" class="btn btn-sm btn-outline-info">Note</button>
+                    <a asp-action="ConfirmDelete" asp-route-productCode="@item.ProductCode" class="btn btn-sm btn-outline-danger">Delete</a>
+                    <a asp-action="Edit" asp-route-productCode="@item.ProductCode" class="btn btn-sm btn-outline-warning">Edit</a>
+                    <button type="button" onclick="loadImage('@item.ProductCode')" class="btn btn-sm btn-outline-dark">Image</button>
+                </td>
+            </tr>
+        }
+        <tr>
+            <td colspan="12">
+                <form asp-action="InventoryManage" method="get">
+                    <input type="hidden" name="orderBy" value="@order">
+                    <input type="submit" value="Go to" /> page <input type="number" max="@pages" min="1" name="page" value="@p" /> of @pages
+                </form>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="12"><strong>Tổng số sản phẩm : @Count  </strong></td>
+      
+        </tr>
+    </tbody>
+</table>
+
+<!-- Modalbox để hiển thị note -->
+<div class="modal fade" id="myModal1" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Ghi chú</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+            </div>
+            <div class="modal-body">
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modalbox để hiển thị ảnh -->
+<div class="modal fade" id="myModal2" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Ảnh</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+            </div>
+            <div class="modal-body">
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+

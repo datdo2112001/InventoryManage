@@ -1,0 +1,32 @@
+﻿@model SaleManagement.Models.Product;
+@{
+    ViewData["Title"] = "Delete a product";
+}
+
+<p class="p-3 alert-danger">Bạn muốn xóa sản phẩm này ?</p>
+
+<div>
+    <p class="h3">@Model.ProductName</p> 
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2"><label asp-for="ProductCode"></label></dt>
+        <dd class="col-sm-10">@Model.ProductCode</dd>
+        <dt class="col-sm-2"><label asp-for="ProductName"></label></dt>
+        <dd class="col-sm-10">@Model.ProductName</dd>
+        <dt class="col-sm-2"><label asp-for="ProductLine"></label></dt>
+        <dd class="col-sm-10">@Model.ProductLine</dd>
+        <dt class="col-sm-2"><label asp-for="Factory"></label></dt>
+        <dd class="col-sm-10">@Model.Factory</dd>
+        <dt class="col-sm-2"><label asp-for="Date"></label></dt>
+        <dd class="col-sm-10">@Model.Date</dd>
+        <dt class="col-sm-2"><label asp-for="Price"></label></dt>
+        <dd class="col-sm-10">@Model.Price</dd>
+        <dt class="col-sm-2"><label asp-for="Stock"></label></dt>
+        <dd class="col-sm-10">@Model.Stock</dd>
+    </dl>
+</div>
+<form asp-action="Delete">
+    <input type="hidden" name="productCode" value="@Model.ProductCode" />
+    <input type="submit" value="Xóa" class="btn btn-outline-danger btn-sm" /> |
+    <a asp-action="InventoryManage" class="btn btn-sm btn-outline-secondary">Quay lại</a>
+</form>
